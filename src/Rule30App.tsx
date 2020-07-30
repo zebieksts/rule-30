@@ -1,10 +1,16 @@
 import React from 'react';
-import './App.css';
 
-const EL_SIZE = 3;
-const COUNT = 1000;
+/**
+ * This application draws cellural automaton rule 30 pattern rotated by 45 degree.
+ * https://en.wikipedia.org/wiki/Rule_30
+ * 
+ * COUNT is the count of lines to draw. <1K is fine on my machine, but ~2K starts to freeze browser.
+ * EL_SIZE cell size in pixels.
+ */
+function Rule30App() {
+  const EL_SIZE = 2;
+  const COUNT = 500;
 
-function App() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [context, setContext] = React.useState<CanvasRenderingContext2D | null>(null);
   
@@ -17,16 +23,14 @@ function App() {
       }
     }
 
-    // Draw a rectangle
-    if (context) getGrid(context);
-
+    if (context) {
+      renderPattern(context);
+    }
   }, [context]);
 
-  const getGrid = (context: CanvasRenderingContext2D) => {
-    //const result: JSX.Element[][] = [];
+  const renderPattern = (context: CanvasRenderingContext2D) => {
     const data: boolean[][] = [];
     for (let i = 0; i < COUNT; i++) {
-      //const line: JSX.Element[] = [];
       const data_line: boolean[] = [];
       for (let j = 0; j < COUNT; j++) {
         if (i === 0) {
@@ -36,26 +40,15 @@ function App() {
         }
         context.fillStyle =data_line[j] ? '#000': '#fff';
         context.fillRect(EL_SIZE * i, EL_SIZE * j, EL_SIZE, EL_SIZE);
-        /*line.push(
-          <rect
-            width={EL_SIZE}
-            height={EL_SIZE}
-            x={EL_SIZE * i}
-            y={EL_SIZE * j}
-            fill={data_line[j] ? 'blue' : 'white'}
-            id={'' + i + '_' + j}
-          />
-        );*/
       }
       data.push(data_line);
-     // result.push(line);
     }
     return data;
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div style={{textAlign: 'center'}}>
+      <h2>Rule 30</h2>
       <canvas
         id="canvas"
         ref={canvasRef}
@@ -66,9 +59,8 @@ function App() {
           marginTop: 10,
         }}
       ></canvas>
-      </header>
     </div>
   );
 }
 
-export default App;
+export default Rule30App;
