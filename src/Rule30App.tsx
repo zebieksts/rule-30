@@ -9,7 +9,7 @@ import React from 'react';
  */
 function Rule30App() {
   const EL_SIZE = 2;
-  const COUNT = 500;
+  const COUNT = 200;
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [context, setContext] = React.useState<CanvasRenderingContext2D | null>(null);
