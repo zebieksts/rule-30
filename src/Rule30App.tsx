@@ -3,17 +3,17 @@ import React from 'react';
 /**
  * This application draws cellural automaton rule 30 pattern rotated by 45 degree.
  * https://en.wikipedia.org/wiki/Rule_30
- * 
+ *
  * COUNT is the count of lines to draw. <1K is fine on my machine, but ~2K starts to freeze browser.
  * EL_SIZE cell size in pixels.
  */
 function Rule30App() {
   const EL_SIZE = 2;
-  const COUNT = 200;
+  const COUNT = 1000;
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [context, setContext] = React.useState<CanvasRenderingContext2D | null>(null);
-  
+
   React.useEffect(() => {
     if (canvasRef.current) {
       const renderCtx = canvasRef.current.getContext('2d');
@@ -33,13 +33,15 @@ function Rule30App() {
     for (let i = 0; i < COUNT; i++) {
       const data_line: boolean[] = [];
       for (let j = 0; j < COUNT; j++) {
-        if (i === 0) {
-          j === 0 ? data_line.push(true) : data_line.push(false);
+        if (i === 0 && j === COUNT / 2) {
+          data_line.push(true);
+        } else if (j < COUNT / 2 - i || j > COUNT / 2 + i) {
+          data_line.push(false);
         } else {
-          data_line.push(!!data[i - 1][j] !== (!!data[i - 1][j - 1] || !!data[i - 1][j - 2]));
+          data_line.push(!!data[i - 1][j - 1] !== (!!data[i - 1][j] || !!data[i - 1][j + 1]));
         }
-        context.fillStyle =data_line[j] ? '#000': '#fff';
-        context.fillRect(EL_SIZE * i, EL_SIZE * j, EL_SIZE, EL_SIZE);
+        context.fillStyle = data_line[j] ? '#000' : '#fff';
+        context.fillRect(EL_SIZE * j - (COUNT - i * 2), EL_SIZE * i, EL_SIZE, EL_SIZE);
       }
       data.push(data_line);
     }
